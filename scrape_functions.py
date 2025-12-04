@@ -27,7 +27,7 @@ def scrape_digi24():
     chrome_options = webdriver.ChromeOptions()
     #chrome_options.add_argument("--no-sandbox")
     #chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--headless=new") ##asta face ca pagina sa ruleze in fundal
 
     driver = webdriver.Chrome(service=service, options=chrome_options)#docker 4444:4444 ca sa ruleze selenium in background
 
