@@ -68,7 +68,7 @@ class NewsScraperApp:
         self.text_box.pack(pady=10, padx=50, fill=tk.BOTH, expand=True)
 
         # lista de tag-uri pt stilul textului
-        self.text_box.tag_configure("Titlu", justify='center', font=("times new roman", 24, "bold"))
+        self.text_box.tag_configure("Titlu", justify='center', font=("times new roman", 24, "bold", "underline"))
         self.text_box.tag_configure("SursaTag", font=("times new roman", 14, "italic"))
         self.text_box.tag_configure("ContinutTag", font=("times new roman", 16))
 
@@ -102,7 +102,8 @@ class NewsScraperApp:
             #site = self.sites.get()
             scraper_thread = threading.Thread(target=self.special_run_scraper, args=(sites,))
             scraper_thread.start()
-        #self.text_box.delete("1.0", "2.0")
+
+        self.text_box.delete("1.0", "2.0")
 
         #ruleaza in loop toate sursele de stiri
 
