@@ -18,7 +18,7 @@ from scrape_functions import *
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #daca modifici cod adauga comentarii pentru ca noi,ceilalti sa stim ce si cum ai modificat
 
-#de facut: mai multe articole , docker 4444:4444, si sa updatam interfata
+#de facut: mai multe articole , docker 4444:4444
 #erori de rezolvat: stale element atunci cand dai sa incarce pagina -> trebuie adaugat un for care sa mai incerce
 #                   de minim inca 3 ori sa ruleze tot codul pentru ca de cele mai multe ori daca ii dai sa se incarce
 #                   din nou... merge
