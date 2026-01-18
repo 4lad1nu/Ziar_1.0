@@ -1,11 +1,12 @@
 import tkinter as tk
 from random import paretovariate
 from tkinter import ttk, scrolledtext, messagebox
+from tkinter import colorchooser
 import threading
 import time
 import sv_ttk
 import json
-import os #tEeeeeeeeeeeeeeeeeest
+import os
 
 # importuri selenium (sunt aici pentru usurinta)
 from selenium import webdriver
@@ -120,7 +121,100 @@ class NewsScraperApp:
 
     # --- FUNCTIA DE SETARI ---
     def settings_btn_action(self):
-        ana=3
+        # Creăm o fereastră secundară (Toplevel)
+        settings_win = tk.Toplevel(self.master)
+        settings_win.title("Setări Afișare")
+        settings_win.geometry("400x450")
+
+        # Facem fereastra modală (utilizatorul trebuie să o închidă înainte să revină la știri)
+        settings_win.transient(self.master)
+
+        # --- Selectare Font ---
+        lbl_font = ttk.Label(settings_win, text="Alege Fontul:", font=("Arial", 10, "bold"))
+        lbl_font.pack(pady=(20, 5))
+
+        fonts = ["Times New Roman", "Arial", "Helvetica", "Courier New", "Verdana", "Calibri"]
+        font_var = tk.StringVar(value="Times New Roman")  # Valoarea implicită
+        font_combo = ttk.Combobox(settings_win, textvariable=font_var, values=fonts, state="readonly")
+        font_combo.pack(pady=5)
+
+        # --- Selectare Mărime ---
+        lbl_size = ttk.Label(settings_win, text="Mărime Text (Conținut):", font=("Arial", 10, "bold"))
+        lbl_size.pack(pady=(15, 5))
+
+        size_var = tk.IntVar(value=16)  # Valoarea implicită din codul tău curent
+        size_spin = ttk.Spinbox(settings_win, from_=10, to=50, textvariable=size_var, width=10)
+        size_spin.pack(pady=5)
+
+        # --- Selectare Culoare  TEXT---
+        lbl_color = ttk.Label(settings_win, text="Culoare Text:", font=("Arial", 10, "bold"))
+        lbl_color.pack(pady=(15, 5))
+
+        # Variabila pentru a stoca culoarea (default alb/gri pentru dark mode)
+        text_color_var = tk.StringVar(value="#e0e0e0")
+
+        def pick_color():
+            color_code = colorchooser.askcolor(title="Alege culoarea textului")[1]
+            if color_code:
+                text_color_var.set(color_code)
+                color_btn.config(text=f"Culoare selectată: {color_code}")
+
+        color_btn = ttk.Button(settings_win, text="🎨 Alege Culoare", command=pick_color)
+        color_btn.pack(pady=5)
+
+        # --- Selectare Culoare FUNDAL ---
+        lbl_bg = ttk.Label(settings_win, text="Culoare Fundal:", font=("Arial", 10, "bold"))
+        lbl_bg.pack(pady=(10, 5))
+
+        # Default gri inchis pt dark mode
+        bg_color_var = tk.StringVar(value="#2e2e2e")
+
+        def pick_bg_color():
+            color_code = colorchooser.askcolor(title="Alege culoarea fundalului")[1]
+            if color_code:
+                bg_color_var.set(color_code)
+
+        bg_btn = ttk.Button(settings_win, text="🎨 Alege Culoare Fundal", command=pick_bg_color)
+        bg_btn.pack(pady=5)
+
+        # --- Funcția de Aplicare ---
+        def apply_changes():
+            selected_font = font_var.get()
+            try:
+                base_size = int(size_var.get())
+            except ValueError:
+                base_size = 16  # fallback dacă introduce prostii
+
+            selected_text_color = text_color_var.get()
+            selected_bg_color = bg_color_var.get()
+
+            # Actualizăm tag-urile din Text Box-ul principal
+            # Păstrăm proporțiile: Titlul mai mare, Sursa mai mică
+
+            # Titlu: base_size + 8, Bold, Underline
+            self.text_box.tag_configure("Titlu",
+                                        font=(selected_font, base_size + 8, "bold", "underline"),
+                                        foreground=selected_text_color)
+
+            # Sursa: base_size - 2, Italic
+            self.text_box.tag_configure("SursaTag",
+                                        font=(selected_font, base_size - 2, "italic"),
+                                        foreground=selected_text_color)
+
+            # Continut: base_size, Normal
+            self.text_box.tag_configure("ContinutTag",
+                                        font=(selected_font, base_size),
+                                        foreground=selected_text_color)
+
+            # Actualizăm și textul general (dacă există text fără tag-uri)
+            self.text_box.configure(font=(selected_font, base_size), fg=selected_text_color, bg=selected_bg_color)
+
+            messagebox.showinfo("Succes", "Setările au fost aplicate!", parent=settings_win)
+            settings_win.destroy()
+
+        # Buton de Confirmare
+        apply_btn = ttk.Button(settings_win, text="✅ Aplică Setările", command=apply_changes, width=20)
+        apply_btn.pack(pady=30)
 
     # --- PERSITANT DATA ---
     def save_preferences(self):
