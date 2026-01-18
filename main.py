@@ -42,6 +42,7 @@ SCRAPERS = {
     "HotNews" : scrape_HotNews,
     "Observator" : scrape_Observator,
     "G4Media" : scrape_G4Media,
+    "TVRInfo" : scrape_TVRInfo,
 }
 
 # //////////////////////////////////////
